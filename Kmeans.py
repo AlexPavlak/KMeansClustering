@@ -6,17 +6,28 @@ def mykmeans(X,k,c):
     #add a column for each points cluster to the data 
     pointsWithClusters = np.hstack((X,np.zeros((len(X),1))))
 
-
+    rowCount=0
     #for every point in X
     for i in X:
         
-        #calculate the distance to every center in C
+        #keep track of what center we are currently working with for each
+        #row of X
+        centerCount = 0
+        #calculate the distance from each point to every center in C
+        
         for j in c:
-            if(j==0):
-                pointsWithClusters[i][2] = np.linalg.norm(X[i]-c[j])
-            elif(pointsWithClusters[i][2] > np.linalg.norm(X[i]-c[j])):
-                pointsWithClusters[i][2] = np.linalg.norm(X[i]-c[j])
-
+            
+            if(centerCount==0):
+                distanceToClosestCenter = np.linalg.norm(i-j)
+                centerCount += 1
+            else:
+                distToCenter = np.linalg.norm(i-j)
+                if(distToCenter < distanceToClosestCenter):
+                    pointsWithClusters[rowCount][2] = centerCount
+                    distanceToClosestCenter = distToCenter
+                centerCount+=1
+        rowCount += 1
+    np.set_printoptions(suppress=True,linewidth=np.nan,threshold=np.nan)
     print(pointsWithClusters) 
 
 ###MAIN###
