@@ -58,7 +58,10 @@ def mykmeans(X,k,c):
         #find the smallest l2 norm between the new center and the previous center
         for i in range(len(centerSets)) :
             normBetweenCenters = np.linalg.norm(centerSets[i,1:]-c[i])
+            #assign the new clusters
             c[i] = centerSets[i,1:]
+            #find the smallest distance between an old and a new cluster
+            #this is our stopping condition.
             if(normBetweenCenters < smallestNorm):
                 smallestNorm = normBetweenCenters
         print(normBetweenCenters)
