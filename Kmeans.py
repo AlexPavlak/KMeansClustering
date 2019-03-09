@@ -47,14 +47,11 @@ def mykmeans(X,k,c):
             centerSets[assignedCenter][0] += 1
             centerSets[assignedCenter,1:] += i
             rowCount += 1
-        np.set_printoptions(suppress=True,linewidth=np.nan,threshold=np.nan)
-        #print(pointsWithClusters)
-        print(centerSets)
+
         #UPDATE STEP
         #determine the new centers
         for i in centerSets:
             i[1:] /= i[0]
-        print(centerSets)
         #find the smallest l2 norm between the new center and the previous center
         for i in range(len(centerSets)) :
             normBetweenCenters = np.linalg.norm(centerSets[i,1:]-c[i])
@@ -64,10 +61,11 @@ def mykmeans(X,k,c):
             #this is our stopping condition.
             if(normBetweenCenters < smallestNorm):
                 smallestNorm = normBetweenCenters
-        print(normBetweenCenters)
     print("Number of iterations: ", iteration)
     finalCenters = np.array(c)
     return finalCenters
+
+
 ###MAIN###
 #Given parameters for generating 1st set of gausian numbers
 mean1 = np.array([1,0])
@@ -77,15 +75,39 @@ dev1 = np.array([[0.9,0.4],[0.4,0.9]])
 mean2 = np.array([0,1.5])
 dev2 = ([[0.9,0.4],[0.4,0.9]])
 
+#create clusters and combine them into a single set
 set1 = np.random.multivariate_normal(mean1,dev1,500)
 set2 = np.random.multivariate_normal(mean2,dev2,500)
-
 X = np.concatenate((set1,set2),axis=0)
-clusters = mykmeans(X,4,[[10,10],[-10,-10],[10,-10],[-10,10]])
 
-plt.scatter(X[:,0],X[:,1])
-plt.scatter(clusters[:,0],clusters[:,1])
+plt.scatter(X[:,0],X[:,1])  
+plt.suptitle('Randomly Generated Data')
 plt.show()
+
+#execute with centers for problem 1.2
+clusters = mykmeans(X, 2, [[10,10],[-10,-10]])
+print(clusters)
+
+#plot results
+data = plt.scatter(X[:,0],X[:,1], label='Data')
+centers =plt.scatter(clusters[:,0],clusters[:,1], label='Centers')
+plt.legend([data, centers], ['Data','Centers'])
+plt.suptitle('Kmeans, K = 2')
+plt.show()
+
+#execute with centers from problem 1.3
+clusters = mykmeans(X,4, [[10,10],[-10,-10],[10,-10],[-10,10]])
+print(clusters)
+
+#plot results
+data = plt.scatter(X[:,0],X[:,1], label='Data')
+centers =plt.scatter(clusters[:,0],clusters[:,1], label='Centers')
+plt.legend([data, centers], ['Data','Centers'])
+plt.suptitle('Kmeans, K = 4')
+plt.show()
+
+
+
 
 
 
